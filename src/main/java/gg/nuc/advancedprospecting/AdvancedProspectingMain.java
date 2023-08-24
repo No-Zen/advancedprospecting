@@ -2,6 +2,7 @@ package gg.nuc.advancedprospecting;
 
 import com.mojang.logging.LogUtils;
 import gg.nuc.advancedprospecting.events.DebugItemHandler;
+import gg.nuc.advancedprospecting.init.BlockInit;
 import gg.nuc.advancedprospecting.init.ItemInit;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -41,6 +42,7 @@ public class AdvancedProspectingMain
 
         modEventBus.addListener(this::setup);
         ItemInit.ITEMS.register(modEventBus);
+        BlockInit.BLOCKS.register(modEventBus);
 
         new DebugItemHandler();
 
@@ -58,7 +60,7 @@ public class AdvancedProspectingMain
     private void enqueueIMC(final InterModEnqueueEvent event)
     {
         // Some example code to dispatch IMC to another mod
-        InterModComms.sendTo("examplemod", "helloworld", () -> { LOGGER.info("Hello world from the MDK"); return "Hello world";});
+        InterModComms.sendTo("advancedprospecting", "helloworld", () -> { LOGGER.info("Hello world from the MDK"); return "Hello world";});
     }
 
     private void processIMC(final InterModProcessEvent event)

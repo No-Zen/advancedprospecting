@@ -1,5 +1,7 @@
 {
   "itemGroup.advancedprospecting": "Advanced Prospecting",
 
-  "item.advancedprospecting.debug_item": "Debug Item"
+  "item.advancedprospecting.debug_item": "Debug Item",
+
+  "block.advancedprospecting.debug_block": "Debug Block"
 }

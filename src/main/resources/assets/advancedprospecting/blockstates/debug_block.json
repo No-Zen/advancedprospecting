@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "advancedprospecting:block/debug_block"
+    }
+  }
+}

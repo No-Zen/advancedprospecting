@@ -27,7 +27,7 @@ displayName="Advanced Prospecting" #mandatory
 # A URL for the "homepage" for this mod, displayed in the mod UI
 #displayURL="https://change.me.to.your.mods.homepage.example.invalid/" #optional
 # A file name (in the root of the mod JAR) containing a logo for display
-#logoFile="examplemod.png" #optional
+#logoFile="advancedprospecting.png" #optional
 # A text field displayed in the mod UI
 #credits="None yet" #optional
 # A text field displayed in the mod UI
@@ -37,7 +37,7 @@ description='''
 A mod to bring advanced prospecting tools to your Minecraft world.
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
-[[dependencies.examplemod]] #optional
+[[dependencies.advancedprospecting]] #optional
     # the modid of the dependency
     modId="forge" #mandatory
     # Does this dependency have to exist - if not, ordering below must be specified
@@ -49,7 +49,7 @@ A mod to bring advanced prospecting tools to your Minecraft world.
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
     side="BOTH"
 # Here's another dependency
-[[dependencies.examplemod]]
+[[dependencies.advancedprospecting]]
     modId="minecraft"
     mandatory=true
 # This version range declares a minimum of the current minecraft version up to but not including the next major version
