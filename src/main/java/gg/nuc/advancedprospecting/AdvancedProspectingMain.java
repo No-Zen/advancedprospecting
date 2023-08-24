@@ -1,6 +1,7 @@
 package gg.nuc.advancedprospecting;
 
 import com.mojang.logging.LogUtils;
+import gg.nuc.advancedprospecting.events.DebugItemHandler;
 import gg.nuc.advancedprospecting.init.ItemInit;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -40,6 +41,8 @@ public class AdvancedProspectingMain
 
         modEventBus.addListener(this::setup);
         ItemInit.ITEMS.register(modEventBus);
+
+        new DebugItemHandler();
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);

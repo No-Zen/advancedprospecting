@@ -1,6 +1,7 @@
 package gg.nuc.advancedprospecting.init;
 
 import gg.nuc.advancedprospecting.AdvancedProspectingMain;
+import gg.nuc.advancedprospecting.init.items.DebugItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -12,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public class ItemInit {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, AdvancedProspectingMain.MOD_ID);
 
-    public static final RegistryObject<Item> DEBUG_ITEM = ITEMS.register("debug_item", () -> new Item(new Item.Properties().tab(ModCreativeTab.instance)));
+    public static final RegistryObject<Item> DEBUG_ITEM = ITEMS.register("debug_item", () -> new DebugItem(new Item.Properties().tab(ModCreativeTab.instance)));
 
     public static class ModCreativeTab extends CreativeModeTab {
         public static final ModCreativeTab instance = new ModCreativeTab(CreativeModeTab.TABS.length, "advancedprospecting");
