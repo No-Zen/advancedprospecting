@@ -33,6 +33,7 @@ public class DebugItemHandler {
         BlockPos blockPos = event.getPos();
 
         if (heldItem.getItem() instanceof DebugItem) {
+            player.swing(event.getHand());
             level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BOOK_PAGE_TURN, SoundSource.PLAYERS, 1.0F, 1.0F);
 
             if (level.isClientSide) {
@@ -51,9 +52,6 @@ public class DebugItemHandler {
 
                 player.sendMessage(textComponent, player.getUUID());
             }
-
-            // Cancel the event to prevent the furnace GUI from opening
-            event.setCanceled(true);
         }
     }
 
