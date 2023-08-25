@@ -1,6 +1,6 @@
 package gg.nuc.advancedprospecting.events;
 
-import gg.nuc.advancedprospecting.init.items.DebugItem;
+import gg.nuc.advancedprospecting.items.DebugItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -52,6 +52,8 @@ public class DebugItemHandler {
 
                 player.sendMessage(textComponent, player.getUUID());
             }
+
+            event.setCanceled(true);
         }
     }
 

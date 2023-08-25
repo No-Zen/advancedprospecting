@@ -1,6 +1,7 @@
 package gg.nuc.advancedprospecting.init;
 
 import gg.nuc.advancedprospecting.AdvancedProspectingMain;
+import gg.nuc.advancedprospecting.blocks.DebugBlock;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -19,7 +20,7 @@ import java.util.Objects;
 public class BlockInit {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, AdvancedProspectingMain.MOD_ID);
 
-    public static final RegistryObject<Block> DEBUG_BLOCK = BLOCKS.register("debug_block", () -> new Block(Block.Properties.of(Material.STONE).strength(4f, 1200f).requiresCorrectToolForDrops().lightLevel((state) -> 15)));
+    public static final RegistryObject<Block> DEBUG_BLOCK = BLOCKS.register("debug_block", () -> new DebugBlock(Block.Properties.of(Material.STONE).strength(2f, 1f).randomTicks().requiresCorrectToolForDrops()));
 
     @SubscribeEvent
     public static void onRegisterItems(final RegistryEvent.Register<Item> event) {

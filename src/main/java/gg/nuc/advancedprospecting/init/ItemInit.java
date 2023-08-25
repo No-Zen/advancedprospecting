@@ -1,7 +1,7 @@
 package gg.nuc.advancedprospecting.init;
 
 import gg.nuc.advancedprospecting.AdvancedProspectingMain;
-import gg.nuc.advancedprospecting.init.items.DebugItem;
+import gg.nuc.advancedprospecting.items.DebugItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
