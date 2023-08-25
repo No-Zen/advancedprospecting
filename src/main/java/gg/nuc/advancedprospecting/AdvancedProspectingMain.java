@@ -3,6 +3,7 @@ package gg.nuc.advancedprospecting;
 import com.mojang.logging.LogUtils;
 import gg.nuc.advancedprospecting.init.BlockEntityInit;
 import gg.nuc.advancedprospecting.init.BlockInit;
+import gg.nuc.advancedprospecting.init.ContainerInit;
 import gg.nuc.advancedprospecting.init.ItemInit;
 import gg.nuc.advancedprospecting.network.ModNetwork;
 import net.minecraft.world.level.block.Block;
@@ -23,7 +24,7 @@ import org.slf4j.Logger;
 import java.util.stream.Collectors;
 
 // The value here should match an entry in the META-INF/mods.toml file
-@Mod("advancedprospecting")
+@Mod(AdvancedProspectingMain.MOD_ID)
 public class AdvancedProspectingMain {
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -43,6 +44,7 @@ public class AdvancedProspectingMain {
         ItemInit.ITEMS.register(modEventBus);
         BlockInit.BLOCKS.register(modEventBus);
         BlockEntityInit.BLOCK_ENTITY_TYPES.register(modEventBus);
+        ContainerInit.CONTAINERS.register(modEventBus);
         ModNetwork.register();
 
         // Register ourselves for server and other game events we are interested in

@@ -1,6 +1,6 @@
 package gg.nuc.advancedprospecting.items;
 
-import gg.nuc.advancedprospecting.events.DebugItemHandler;
+import gg.nuc.advancedprospecting.event.DebugItemHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;

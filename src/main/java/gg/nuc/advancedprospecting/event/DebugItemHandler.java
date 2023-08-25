@@ -1,4 +1,4 @@
-package gg.nuc.advancedprospecting.events;
+package gg.nuc.advancedprospecting.event;
 
 import gg.nuc.advancedprospecting.items.DebugItem;
 import net.minecraft.ChatFormatting;

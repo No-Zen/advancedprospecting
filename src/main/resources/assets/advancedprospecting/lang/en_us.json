@@ -3,5 +3,7 @@
 
   "item.advancedprospecting.debug_item": "Debug Item",
 
-  "block.advancedprospecting.debug_block": "Debug Block"
+  "block.advancedprospecting.debug_block": "Debug Block",
+
+  "container.advancedprospecting.debug_block": "Debug Block"
 }

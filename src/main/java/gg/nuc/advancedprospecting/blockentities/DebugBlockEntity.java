@@ -1,11 +1,14 @@
 package gg.nuc.advancedprospecting.blockentities;
 
+import gg.nuc.advancedprospecting.AdvancedProspectingMain;
 import gg.nuc.advancedprospecting.init.BlockEntityInit;
 import gg.nuc.advancedprospecting.network.ModNetwork;
 import gg.nuc.advancedprospecting.network.SyncBlockEntityPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
@@ -14,10 +17,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.network.PacketDistributor;
 
-public class DebugBlockEntity extends BlockEntity {
+public class DebugBlockEntity extends InventoryBlockEntity {
     public DebugBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntityInit.DEBUG_BLOCK.get(), pos, state);
+        super(BlockEntityInit.DEBUG_BLOCK.get(), pos, state, 27);
     }
+
+    public static final Component TITLE = new TranslatableComponent("container."+ AdvancedProspectingMain.MOD_ID+".debug_block");
 
     int ticks = 0;
 
