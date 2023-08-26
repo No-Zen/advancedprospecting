@@ -1,4 +1,4 @@
-package gg.nuc.advancedprospecting.client.event;
+package gg.nuc.advancedprospecting.common.event;
 
 import gg.nuc.advancedprospecting.common.item.DebugItem;
 import net.minecraft.ChatFormatting;
@@ -52,6 +52,7 @@ public class DebugItemHandler {
 
                 player.sendMessage(textComponent, player.getUUID());
             }
+            player.getCooldowns().addCooldown(heldItem.getItem(), 5);
 
             event.setCanceled(true);
         }

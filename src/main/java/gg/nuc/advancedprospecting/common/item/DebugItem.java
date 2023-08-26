@@ -1,7 +1,7 @@
 package gg.nuc.advancedprospecting.common.item;
 
 import gg.nuc.advancedprospecting.AdvancedProspecting;
-import gg.nuc.advancedprospecting.client.event.DebugItemHandler;
+import gg.nuc.advancedprospecting.common.event.DebugItemHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
