@@ -11,6 +11,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -33,13 +34,13 @@ public class DebugBlock extends Block implements EntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return BlockEntityInit.DEBUG_BLOCK.get().create(pos, state);
+        return new DebugBlockEntity(pos, state);
     }
 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return type == BlockEntityInit.DEBUG_BLOCK.get() ? DebugBlockEntity::tick : null;
+        return level.isClientSide() ? null : (level_, pos_, state_, blockEntity_) -> ((DebugBlockEntity) blockEntity_).tick();
     }
 
     @Override
@@ -57,13 +58,32 @@ public class DebugBlock extends Block implements EntityBlock {
         return InteractionResult.SUCCESS;
     }
 
+
+
     @Override
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, Random rand) {
         if (!level.isClientSide()) {
-            TextComponent textComponent = new TextComponent("Random tick at " + pos);
-            for (ServerPlayer player : level.players()) {
-                player.sendMessage(textComponent, player.getUUID());
+            BlockEntity be_ = level.getBlockEntity(pos);
+            if (be_ instanceof DebugBlockEntity be) {
+                be.randomTick();
             }
         }
+    }
+
+    @Override
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moving) {
+        final BlockEntity be_ = level.getBlockEntity(pos);
+        if (!((be_ instanceof final DebugBlockEntity be)))
+            return;
+
+        for (int slot = 0; slot < be.inventory.getSlots(); slot++) {
+            if (be.inventory.getStackInSlot(slot).isEmpty())
+                return;
+
+            level.addFreshEntity(new ItemEntity(level, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D,
+                    be.inventory.getStackInSlot(slot)));
+        }
+
+        super.onRemove(state, level, pos, newState, moving);
     }
 }

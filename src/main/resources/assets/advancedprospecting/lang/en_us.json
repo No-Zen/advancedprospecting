@@ -5,5 +5,7 @@
 
   "block.advancedprospecting.debug_block": "Debug Block",
 
-  "container.advancedprospecting.debug_block": "Debug Block"
+  "container.advancedprospecting.debug_block": "Debug Block",
+
+  "button.advancedprospecting.transmute": "Transmute"
 }
