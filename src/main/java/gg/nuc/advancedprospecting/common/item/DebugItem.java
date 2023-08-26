@@ -1,9 +1,10 @@
-package gg.nuc.advancedprospecting.items;
+package gg.nuc.advancedprospecting.common.item;
 
-import gg.nuc.advancedprospecting.event.DebugItemHandler;
+import gg.nuc.advancedprospecting.AdvancedProspecting;
+import gg.nuc.advancedprospecting.client.event.DebugItemHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -26,25 +27,22 @@ public class DebugItem extends Item {
     }
 
     @Override
-    public InteractionResult useOn(UseOnContext p_41427_) {
+    public @NotNull InteractionResult useOn(@NotNull UseOnContext context) {
         return InteractionResult.SUCCESS;
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, Player player, @NotNull InteractionHand hand) {
         return new InteractionResultHolder<>(InteractionResult.SUCCESS, player.getItemInHand(hand));
     }
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
-        // Check if the tooltip list isn't empty and contains the name
         if (!tooltip.isEmpty()) {
-            // Replace the first component (the name of the item) with a colored version
-            tooltip.set(0, tooltip.get(0).copy().withStyle(ChatFormatting.GOLD)); // For example, set it to red
+            tooltip.set(0, tooltip.get(0).copy().withStyle(ChatFormatting.GOLD));
         }
 
-        // Add tooltip
-        tooltip.add(new TextComponent("Gives information about stuff"));
+        tooltip.add(new TranslatableComponent("tooltip." + AdvancedProspecting.MOD_ID + ".debug_item"));
 
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }

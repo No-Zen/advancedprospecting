@@ -1,11 +1,7 @@
 package gg.nuc.advancedprospecting;
 
 import com.mojang.logging.LogUtils;
-import gg.nuc.advancedprospecting.init.BlockEntityInit;
-import gg.nuc.advancedprospecting.init.BlockInit;
-import gg.nuc.advancedprospecting.init.ContainerInit;
-import gg.nuc.advancedprospecting.init.ItemInit;
-import gg.nuc.advancedprospecting.network.ModNetwork;
+import gg.nuc.advancedprospecting.core.init.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
@@ -24,13 +20,13 @@ import org.slf4j.Logger;
 import java.util.stream.Collectors;
 
 // The value here should match an entry in the META-INF/mods.toml file
-@Mod(AdvancedProspectingMain.MOD_ID)
-public class AdvancedProspectingMain {
-    // Directly reference a slf4j logger
-    private static final Logger LOGGER = LogUtils.getLogger();
+@Mod(AdvancedProspecting.MOD_ID)
+public class AdvancedProspecting {
     public static final String MOD_ID = "advancedprospecting";
+    // Directly reference a slf4j logger
+    public static final Logger LOGGER = LogUtils.getLogger();
 
-    public AdvancedProspectingMain() {
+    public AdvancedProspecting() {
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         // Register the setup method for modloading
@@ -45,7 +41,7 @@ public class AdvancedProspectingMain {
         BlockInit.BLOCKS.register(modEventBus);
         BlockEntityInit.BLOCK_ENTITY_TYPES.register(modEventBus);
         ContainerInit.CONTAINERS.register(modEventBus);
-        ModNetwork.register();
+        PacketHandler.init();
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);

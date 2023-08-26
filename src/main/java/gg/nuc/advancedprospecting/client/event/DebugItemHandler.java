@@ -1,6 +1,6 @@
-package gg.nuc.advancedprospecting.event;
+package gg.nuc.advancedprospecting.client.event;
 
-import gg.nuc.advancedprospecting.items.DebugItem;
+import gg.nuc.advancedprospecting.common.item.DebugItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;

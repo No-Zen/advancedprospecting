@@ -1,15 +1,15 @@
-package gg.nuc.advancedprospecting.event;
+package gg.nuc.advancedprospecting.client.event;
 
-import gg.nuc.advancedprospecting.AdvancedProspectingMain;
-import gg.nuc.advancedprospecting.init.ContainerInit;
-import gg.nuc.advancedprospecting.screen.DebugBlockScreen;
+import gg.nuc.advancedprospecting.AdvancedProspecting;
+import gg.nuc.advancedprospecting.client.screen.DebugBlockScreen;
+import gg.nuc.advancedprospecting.core.init.ContainerInit;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
-@Mod.EventBusSubscriber(modid = AdvancedProspectingMain.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = AdvancedProspecting.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class ClientModEvents {
 
     private ClientModEvents() {

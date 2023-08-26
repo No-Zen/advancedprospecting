@@ -1,16 +1,15 @@
-package gg.nuc.advancedprospecting.container;
+package gg.nuc.advancedprospecting.common.container;
 
-import gg.nuc.advancedprospecting.blockentities.DebugBlockEntity;
-import gg.nuc.advancedprospecting.container.syncdata.DebugBlockContainerData;
-import gg.nuc.advancedprospecting.init.BlockInit;
-import gg.nuc.advancedprospecting.init.ContainerInit;
+import gg.nuc.advancedprospecting.common.block.entity.DebugBlockEntity;
+import gg.nuc.advancedprospecting.common.container.syncdata.DebugBlockContainerData;
+import gg.nuc.advancedprospecting.core.init.BlockInit;
+import gg.nuc.advancedprospecting.core.init.ContainerInit;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -19,8 +18,8 @@ import org.jetbrains.annotations.NotNull;
 public class DebugBlockContainer extends AbstractContainerMenu {
 
     public final BlockPos pos;
-    private final ContainerLevelAccess containerAccess;
     public final ContainerData data;
+    private final ContainerLevelAccess containerAccess;
 
     // Client Constructor
     public DebugBlockContainer(int id, Inventory playerInv) {
@@ -30,7 +29,7 @@ public class DebugBlockContainer extends AbstractContainerMenu {
     // Server constructor
     public DebugBlockContainer(int id, Inventory playerInv, IItemHandler slots, BlockPos pos, ContainerData data) {
         super(ContainerInit.DEBUG_BLOCK.get(), id);
-        this.pos=pos;
+        this.pos = pos;
         this.containerAccess = ContainerLevelAccess.create(playerInv.player.level, pos);
         this.data = data;
 
@@ -55,36 +54,17 @@ public class DebugBlockContainer extends AbstractContainerMenu {
         addDataSlots(data);
     }
 
-    private class InputSlot extends SlotItemHandler {
-        public InputSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
-            super(itemHandler, index, xPosition, yPosition);
-        }
-
-        @Override
-        public boolean mayPlace(@NotNull ItemStack stack) {
-            return stack.is(ItemTags.PLANKS);
-        }
-    }
-
-    private class OutputSlot extends SlotItemHandler {
-
-        public OutputSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
-            super(itemHandler, index, xPosition, yPosition);
-        }
-
-        @Override
-        public boolean mayPlace(@NotNull ItemStack stack) {
-            return false;
-        }
+    public static MenuConstructor getServerContainer(DebugBlockEntity be, BlockPos pos) {
+        return (id, playerInv, player) -> new DebugBlockContainer(id, playerInv, be.inventory, pos, new DebugBlockContainerData(be, 4));
     }
 
     @Override
-    public boolean stillValid(Player player) {
+    public boolean stillValid(@NotNull Player player) {
         return stillValid(this.containerAccess, player, BlockInit.DEBUG_BLOCK.get());
     }
 
     @Override
-    public ItemStack quickMoveStack(Player player, int index) {
+    public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
         var retStack = ItemStack.EMPTY;
         final Slot slot = getSlot(index);
         if (slot.hasItem()) {
@@ -104,11 +84,30 @@ public class DebugBlockContainer extends AbstractContainerMenu {
         return retStack;
     }
 
-    public static MenuConstructor getServerContainer(DebugBlockEntity be, BlockPos pos) {
-        return (id, playerInv, player) -> new DebugBlockContainer(id, playerInv, be.inventory, pos, new DebugBlockContainerData(be, 4));
-    }
-
     public BlockPos getPos() {
         return pos;
+    }
+
+    private static class InputSlot extends SlotItemHandler {
+        public InputSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+            super(itemHandler, index, xPosition, yPosition);
+        }
+
+        @Override
+        public boolean mayPlace(@NotNull ItemStack stack) {
+            return stack.is(ItemTags.PLANKS);
+        }
+    }
+
+    private static class OutputSlot extends SlotItemHandler {
+
+        public OutputSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+            super(itemHandler, index, xPosition, yPosition);
+        }
+
+        @Override
+        public boolean mayPlace(@NotNull ItemStack stack) {
+            return false;
+        }
     }
 }

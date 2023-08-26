@@ -1,9 +1,10 @@
-package gg.nuc.advancedprospecting.blockentities;
+package gg.nuc.advancedprospecting.common.block.entity;
 
-import gg.nuc.advancedprospecting.AdvancedProspectingMain;
-import gg.nuc.advancedprospecting.init.BlockEntityInit;
-import gg.nuc.advancedprospecting.network.ModNetwork;
-import gg.nuc.advancedprospecting.network.SyncBlockEntityPacket;
+import gg.nuc.advancedprospecting.AdvancedProspecting;
+import gg.nuc.advancedprospecting.common.block.entity.util.InventoryBlockEntity;
+import gg.nuc.advancedprospecting.core.init.BlockEntityInit;
+import gg.nuc.advancedprospecting.core.init.PacketHandler;
+import gg.nuc.advancedprospecting.core.network.SyncBlockEntityPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -14,16 +15,15 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.PacketDistributor;
+import org.jetbrains.annotations.NotNull;
 
 public class DebugBlockEntity extends InventoryBlockEntity implements BlockEntityTicker<DebugBlockEntity> {
-    public static final Component TITLE = new TranslatableComponent("container." + AdvancedProspectingMain.MOD_ID + ".debug_block");
-
+    public static final Component TITLE = new TranslatableComponent("container." + AdvancedProspecting.MOD_ID + ".debug_block");
+    private final int max_progress = 20 * 3;
     private int ticks = 0;
-
     private int randomTicks = 0;
     private int progress = 0;
     private boolean active = false;
-    private final int max_progress = 20 * 3;
 
     public DebugBlockEntity(BlockPos pos, BlockState state) {
         super(BlockEntityInit.DEBUG_BLOCK.get(), pos, state, 2);
@@ -65,7 +65,7 @@ public class DebugBlockEntity extends InventoryBlockEntity implements BlockEntit
 
         CompoundTag nbt = this.saveWithoutMetadata();
         SyncBlockEntityPacket packet = new SyncBlockEntityPacket(this.getBlockPos(), nbt);
-        ModNetwork.CHANNEL.send(PacketDistributor.TRACKING_CHUNK.with(() -> this.getLevel().getChunkAt(this.getBlockPos())), packet);
+        PacketHandler.CHANNEL.send(PacketDistributor.TRACKING_CHUNK.with(() -> this.getLevel().getChunkAt(this.getBlockPos())), packet);
 
         super.tick();
     }
@@ -79,7 +79,7 @@ public class DebugBlockEntity extends InventoryBlockEntity implements BlockEntit
     }
 
     @Override
-    public void tick(Level level, BlockPos pos, BlockState state, DebugBlockEntity be) {
+    public void tick(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state, DebugBlockEntity be) {
         be.tick();
     }
 

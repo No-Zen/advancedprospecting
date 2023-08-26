@@ -1,11 +1,9 @@
-package gg.nuc.advancedprospecting.container.syncdata;
+package gg.nuc.advancedprospecting.common.container.syncdata;
 
-import gg.nuc.advancedprospecting.blockentities.DebugBlockEntity;
-import net.minecraft.core.BlockPos;
+import gg.nuc.advancedprospecting.common.block.entity.DebugBlockEntity;
 import net.minecraft.world.inventory.SimpleContainerData;
-import net.minecraft.world.level.block.entity.BlockEntity;
 
-public class DebugBlockContainerData  extends SimpleContainerData {
+public class DebugBlockContainerData extends SimpleContainerData {
     private final DebugBlockEntity blockEntity;
 
     public DebugBlockContainerData(DebugBlockEntity be, int amount) {

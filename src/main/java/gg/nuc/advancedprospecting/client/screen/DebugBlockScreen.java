@@ -1,24 +1,23 @@
-package gg.nuc.advancedprospecting.screen;
+package gg.nuc.advancedprospecting.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import gg.nuc.advancedprospecting.AdvancedProspectingMain;
-import gg.nuc.advancedprospecting.container.DebugBlockContainer;
-import gg.nuc.advancedprospecting.container.syncdata.DebugBlockContainerData;
-import gg.nuc.advancedprospecting.network.DebugBlockTransmutePacket;
-import gg.nuc.advancedprospecting.network.ModNetwork;
-import gg.nuc.advancedprospecting.util.Math;
+import gg.nuc.advancedprospecting.AdvancedProspecting;
+import gg.nuc.advancedprospecting.common.container.DebugBlockContainer;
+import gg.nuc.advancedprospecting.core.init.PacketHandler;
+import gg.nuc.advancedprospecting.core.network.DebugBlockTransmutePacket;
+import gg.nuc.advancedprospecting.core.util.Math;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
+import org.jetbrains.annotations.NotNull;
 
 public class DebugBlockScreen extends AbstractContainerScreen<DebugBlockContainer> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(AdvancedProspectingMain.MOD_ID, "textures/gui/debug_block.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(AdvancedProspecting.MOD_ID, "textures/gui/debug_block.png");
 
     private ExtendedButton transmuteButton;
 
@@ -28,8 +27,14 @@ public class DebugBlockScreen extends AbstractContainerScreen<DebugBlockContaine
         this.topPos = 0;
     }
 
+    public static void bindTexture() {
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderSystem.setShaderTexture(0, TEXTURE);
+    }
+
     @Override
-    public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+    public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
         super.render(stack, mouseX, mouseY, partialTicks);
 
         final int progress = this.menu.data.get(0);
@@ -52,23 +57,17 @@ public class DebugBlockScreen extends AbstractContainerScreen<DebugBlockContaine
     @Override
     protected void init() {
         super.init();
-        this.transmuteButton = addRenderableWidget(new ExtendedButton(this.leftPos + 61, this.topPos + 39, 90, 18, new TextComponent("Transmute"), btn -> ModNetwork.CHANNEL.sendToServer(new DebugBlockTransmutePacket())));
+        this.transmuteButton = addRenderableWidget(new ExtendedButton(this.leftPos + 61, this.topPos + 39, 90, 18, new TranslatableComponent("button." + AdvancedProspecting.MOD_ID + ".transmute"), btn -> PacketHandler.CHANNEL.sendToServer(new DebugBlockTransmutePacket())));
     }
 
     @Override
-    protected void renderBg(PoseStack stack, float mouseX, int mouseY, int partialTicks) {
+    protected void renderBg(@NotNull PoseStack stack, float mouseX, int mouseY, int partialTicks) {
         renderBackground(stack);
         bindTexture();
         blit(stack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
     }
 
     @Override
-    protected void renderLabels(PoseStack stack, int mouseX, int mouseY) {
-    }
-
-    public static void bindTexture() {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        RenderSystem.setShaderTexture(0, TEXTURE);
+    protected void renderLabels(@NotNull PoseStack stack, int mouseX, int mouseY) {
     }
 }

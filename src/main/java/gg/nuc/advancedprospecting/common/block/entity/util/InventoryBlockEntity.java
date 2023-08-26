@@ -1,4 +1,4 @@
-package gg.nuc.advancedprospecting.blockentities;
+package gg.nuc.advancedprospecting.common.block.entity.util;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -15,13 +15,14 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("unused")
 public class InventoryBlockEntity extends BlockEntity {
     public final int size;
+    public final ItemStackHandler inventory;
     protected int timer;
     protected boolean requiresUpdate;
-
-    public final ItemStackHandler inventory;
     protected LazyOptional<ItemStackHandler> handler;
 
     public InventoryBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, int size) {
@@ -42,7 +43,7 @@ public class InventoryBlockEntity extends BlockEntity {
     }
 
     @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
+    public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, Direction side) {
         return cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? this.handler.cast()
                 : super.getCapability(cap, side);
     }
@@ -61,7 +62,7 @@ public class InventoryBlockEntity extends BlockEntity {
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
+    public @NotNull CompoundTag getUpdateTag() {
         return serializeNBT();
     }
 
@@ -85,7 +86,7 @@ public class InventoryBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void load(CompoundTag tag) {
+    public void load(@NotNull CompoundTag tag) {
         super.load(tag);
         this.inventory.deserializeNBT(tag.getCompound("Inventory"));
     }
@@ -113,7 +114,7 @@ public class InventoryBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
+    protected void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
         tag.put("Inventory", this.inventory.serializeNBT());
     }
@@ -121,13 +122,13 @@ public class InventoryBlockEntity extends BlockEntity {
     private ItemStackHandler createInventory() {
         return new ItemStackHandler(this.size) {
             @Override
-            public ItemStack extractItem(int slot, int amount, boolean simulate) {
+            public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
                 InventoryBlockEntity.this.update();
                 return super.extractItem(slot, amount, simulate);
             }
 
             @Override
-            public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+            public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
                 InventoryBlockEntity.this.update();
                 return super.insertItem(slot, stack, simulate);
             }
