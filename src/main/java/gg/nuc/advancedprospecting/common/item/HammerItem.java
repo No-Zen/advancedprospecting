@@ -39,7 +39,6 @@ public class HammerItem extends Item {
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
-        //TODO Bad formatting
         if (!tooltip.isEmpty()) {
             tooltip.set(0, tooltip.get(0).copy().withStyle(ChatFormatting.GRAY));
         }

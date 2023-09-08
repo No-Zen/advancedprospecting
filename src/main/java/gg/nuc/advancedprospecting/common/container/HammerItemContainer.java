@@ -17,11 +17,12 @@ public class HammerItemContainer extends AbstractContainerMenu {
 
     // Client Constructor
     public HammerItemContainer(int id, Inventory playerInv) {
-        //FIXME Bad stupid code
+        // FIXME Bad stupid code
         this(id, playerInv, new ItemStackHandler(2), Minecraft.getInstance().player.getItemInHand(InteractionHand.MAIN_HAND), Minecraft.getInstance().player, new SimpleContainerData(4));
     }
 
-    //FIXME What about slots, itemStack and player?
+    // FIXME What about slots, itemStack and player?
+
     // Server constructor
     public HammerItemContainer(int id, Inventory playerInv, IItemHandler slots, ItemStack itemStack, Player player, ContainerData data) {
         super(ContainerInit.HAMMER_ITEM.get(), id);
@@ -32,7 +33,7 @@ public class HammerItemContainer extends AbstractContainerMenu {
         final int PLAYER_INVENTORY_Y = 72;
         final int PLAYER_HOTBAR_Y = 130;
 
-        //TODO Lock slot to stop player from removing item that opened GUI
+        // TODO Lock slot to stop player from removing item that opened GUI
 
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 9; column++) {
