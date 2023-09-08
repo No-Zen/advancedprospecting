@@ -2,12 +2,14 @@
   "itemGroup.advancedprospecting": "Advanced Prospecting",
 
   "item.advancedprospecting.debug_item": "Debug Item",
-
   "tooltip.advancedprospecting.debug_item": "Gives information about blocks",
+  "item.advancedprospecting.hammer_item": "Acoustic Hammer",
+  "tooltip.advancedprospecting.hammer_item": "Strike to unveil geological secrets",
 
   "block.advancedprospecting.debug_block": "Debug Block",
 
   "container.advancedprospecting.debug_block": "Debug Block",
+  "container.advancedprospecting.hammer_item": "Acoustic Hammer",
 
   "button.advancedprospecting.transmute": "Transmute"
 }

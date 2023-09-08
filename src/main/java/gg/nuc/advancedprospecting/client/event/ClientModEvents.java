@@ -2,6 +2,7 @@ package gg.nuc.advancedprospecting.client.event;
 
 import gg.nuc.advancedprospecting.AdvancedProspecting;
 import gg.nuc.advancedprospecting.client.screen.DebugBlockScreen;
+import gg.nuc.advancedprospecting.client.screen.HammerItemScreen;
 import gg.nuc.advancedprospecting.core.init.ContainerInit;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.api.distmarker.Dist;
@@ -18,5 +19,6 @@ public final class ClientModEvents {
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {
         MenuScreens.register(ContainerInit.DEBUG_BLOCK.get(), DebugBlockScreen::new);
+        MenuScreens.register(ContainerInit.HAMMER_ITEM.get(), HammerItemScreen::new);
     }
 }
