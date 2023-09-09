@@ -10,10 +10,14 @@ import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
 public class HammerItemContainer extends AbstractContainerMenu {
     public final ContainerData data;
+    private final Slot SLOT_A;
+    private final Slot SLOT_B;
+    //TODO Add a (static?) field which contains the slot amount.
 
     // Client Constructor
     public HammerItemContainer(int id, Inventory playerInv) {
@@ -33,6 +37,9 @@ public class HammerItemContainer extends AbstractContainerMenu {
         final int PLAYER_INVENTORY_Y = 72;
         final int PLAYER_HOTBAR_Y = 130;
 
+        SLOT_A = addSlot(new SlotItemHandler(slots, 0, 62, 18));
+        SLOT_B = addSlot(new SlotItemHandler(slots, 1, 134, 18));
+
         // TODO Lock slot to stop player from removing item that opened GUI
 
         for (int row = 0; row < 3; row++) {
@@ -49,12 +56,24 @@ public class HammerItemContainer extends AbstractContainerMenu {
     }
 
     public static MenuConstructor getServerContainer(ItemStack itemStack, Player player) {
-        return (id, playerInv, playerEntity) -> new HammerItemContainer(id, playerInv, new ItemStackHandler(2), itemStack, player, new HammerItemContainerData(4));
+        return (id, playerInv, playerEntity) -> new HammerItemContainer(id, playerInv, new ItemStackHandler(2), itemStack, player, new HammerItemContainerData(0));
     }
 
     @Override
     public boolean stillValid(@NotNull Player player) {
         return true;
+    }
+
+    @Override
+    public void removed(Player player) {
+        //ItemStack itemStack = slots.get(0).getItem();
+        ItemStack itemStack = SLOT_A.getItem();
+        if (!itemStack.isEmpty()) {
+            if (!player.getInventory().add(itemStack)) {
+                player.drop(itemStack, true);
+            }
+        }
+        super.removed(player);
     }
 
     @Override
