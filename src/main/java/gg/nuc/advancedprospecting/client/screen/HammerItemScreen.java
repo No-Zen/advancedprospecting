@@ -18,6 +18,8 @@ public class HammerItemScreen extends AbstractContainerScreen<HammerItemContaine
         super(container, playerInv, title);
         this.leftPos = 0;
         this.topPos = 0;
+        this.imageWidth = 176;
+        this.imageHeight = 218;
     }
 
     public static void bindTexture() {
@@ -30,26 +32,46 @@ public class HammerItemScreen extends AbstractContainerScreen<HammerItemContaine
     public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
         super.render(stack, mouseX, mouseY, partialTicks);
 
-        this.font.draw(stack, this.title, this.leftPos + 8, this.topPos + 5, 0x404040);
-        this.font.draw(stack, this.playerInventoryTitle, this.leftPos + 8, this.topPos + 61, 0x404040);
+        this.font.draw(stack, "Y level: ???", this.leftPos + 7, this.topPos + 32, 0x404040);
+        this.font.draw(stack, "Material: ???", this.leftPos + 7, this.topPos + 43, 0x404040);
+
+        this.font.draw(stack, this.title, this.leftPos + 7, this.topPos + 7, 0x404040);
+        this.font.draw(stack, this.playerInventoryTitle, this.leftPos + 7, this.topPos + 124, 0x404040);
+
 
         this.renderTooltip(stack, mouseX, mouseY);
     }
+
+    private SimpleListWidget listWidget;
 
     @Override
     protected void init() {
         super.init();
 
-        SimpleListWidget listWidget = new SimpleListWidget(this.leftPos + 8, this.topPos + 18, this.imageWidth - 16, 40);
-        listWidget.addItem("Item 1");
-        listWidget.addItem("Item 2");
-        listWidget.addItem("Item 3");
-        listWidget.addItem("Item 4");
-        listWidget.addItem("Item 5");
-        listWidget.addItem("Item 6");
-        listWidget.addItem("Item 7");
+        listWidget = new SimpleListWidget(this.leftPos + 86, this.topPos + 19, 64, 100);
+
+        for (int i = 0; i < 15; i++) {
+            listWidget.addItem("Item ÅÍJG_ " + (i + 1));
+        }
 
         addRenderableWidget(listWidget);
+    }
+
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+        // Assuming simpleListWidget is your SimpleListWidget instance
+        if (listWidget.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)) {
+            return true;
+        }
+        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+    }
+
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        if (listWidget.mouseReleased(mouseX, mouseY, button)) {
+            return true;
+        }
+        return super.mouseReleased(mouseX, mouseY, button);
     }
 
     @Override

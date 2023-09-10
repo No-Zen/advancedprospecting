@@ -15,14 +15,12 @@ import org.jetbrains.annotations.NotNull;
 
 public class HammerItemContainer extends AbstractContainerMenu {
     public final ContainerData data;
-    private final Slot SLOT_A;
-    private final Slot SLOT_B;
     //TODO Add a (static?) field which contains the slot amount.
 
     // Client Constructor
     public HammerItemContainer(int id, Inventory playerInv) {
         // FIXME Bad stupid code
-        this(id, playerInv, new ItemStackHandler(2), Minecraft.getInstance().player.getItemInHand(InteractionHand.MAIN_HAND), Minecraft.getInstance().player, new SimpleContainerData(4));
+        this(id, playerInv, new ItemStackHandler(0), Minecraft.getInstance().player.getItemInHand(InteractionHand.MAIN_HAND), Minecraft.getInstance().player, new SimpleContainerData(4));
     }
 
     // FIXME What about slots, itemStack and player?
@@ -34,11 +32,11 @@ public class HammerItemContainer extends AbstractContainerMenu {
 
         final int SLOT_SIZE_WITH_EDGE = 16 + 2;
         final int PLAYER_INVENTORY_X = 8;
-        final int PLAYER_INVENTORY_Y = 72;
-        final int PLAYER_HOTBAR_Y = 130;
+        final int PLAYER_INVENTORY_Y = 136;
+        final int PLAYER_HOTBAR_Y = 194;
 
-        SLOT_A = addSlot(new SlotItemHandler(slots, 0, 62, 18));
-        SLOT_B = addSlot(new SlotItemHandler(slots, 1, 134, 18));
+        //SLOT_A = addSlot(new SlotItemHandler(slots, 0, 62, 18));
+        //SLOT_B = addSlot(new SlotItemHandler(slots, 1, 134, 18));
 
         // TODO Lock slot to stop player from removing item that opened GUI
 
@@ -56,24 +54,12 @@ public class HammerItemContainer extends AbstractContainerMenu {
     }
 
     public static MenuConstructor getServerContainer(ItemStack itemStack, Player player) {
-        return (id, playerInv, playerEntity) -> new HammerItemContainer(id, playerInv, new ItemStackHandler(2), itemStack, player, new HammerItemContainerData(0));
+        return (id, playerInv, playerEntity) -> new HammerItemContainer(id, playerInv, new ItemStackHandler(0), itemStack, player, new HammerItemContainerData(0));
     }
 
     @Override
     public boolean stillValid(@NotNull Player player) {
         return true;
-    }
-
-    @Override
-    public void removed(Player player) {
-        //ItemStack itemStack = slots.get(0).getItem();
-        ItemStack itemStack = SLOT_A.getItem();
-        if (!itemStack.isEmpty()) {
-            if (!player.getInventory().add(itemStack)) {
-                player.drop(itemStack, true);
-            }
-        }
-        super.removed(player);
     }
 
     @Override

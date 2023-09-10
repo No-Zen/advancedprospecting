@@ -40,10 +40,10 @@ public class HammerItem extends Item {
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         if (!tooltip.isEmpty()) {
-            tooltip.set(0, tooltip.get(0).copy().withStyle(ChatFormatting.GRAY));
+            tooltip.set(0, tooltip.get(0).copy().withStyle(ChatFormatting.WHITE));
         }
 
-        tooltip.add(new TranslatableComponent("tooltip." + AdvancedProspecting.MOD_ID + ".hammer_item"));
+        tooltip.add(new TranslatableComponent("tooltip." + AdvancedProspecting.MOD_ID + ".hammer_item").withStyle(ChatFormatting.GRAY));
 
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
