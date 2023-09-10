@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.TranslatableComponent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ public class SimpleListWidget extends AbstractWidget {
     }
 
     @Override
-    public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
+    public void render(@NotNull PoseStack matrices, int mouseX, int mouseY, float delta) {
         // Draw background
         fill(matrices, x, y, x + width, y + height, 0xFF000000);
 
@@ -69,7 +70,7 @@ public class SimpleListWidget extends AbstractWidget {
     }
 
     @Override
-    public void updateNarration(NarrationElementOutput output) {
+    public void updateNarration(@NotNull NarrationElementOutput output) {
         // Implement narration update logic, if necessary
     }
 }
