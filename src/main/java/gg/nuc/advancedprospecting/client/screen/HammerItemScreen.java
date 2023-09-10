@@ -4,12 +4,23 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import gg.nuc.advancedprospecting.AdvancedProspecting;
 import gg.nuc.advancedprospecting.common.container.HammerItemContainer;
+import gg.nuc.advancedprospecting.core.init.PacketHandler;
+import gg.nuc.advancedprospecting.core.network.DebugBlockTransmutePacket;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraftforge.client.gui.widget.ModListWidget;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HammerItemScreen extends AbstractContainerScreen<HammerItemContainer> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(AdvancedProspecting.MOD_ID, "textures/gui/hammer_item.png");
@@ -39,6 +50,17 @@ public class HammerItemScreen extends AbstractContainerScreen<HammerItemContaine
     @Override
     protected void init() {
         super.init();
+
+        SimpleListWidget listWidget = new SimpleListWidget(this.leftPos+8, this.topPos+18, this.imageWidth-16, 40);
+        listWidget.addItem("Item 1");
+        listWidget.addItem("Item 2");
+        listWidget.addItem("Item 3");
+        listWidget.addItem("Item 4");
+        listWidget.addItem("Item 5");
+        listWidget.addItem("Item 6");
+        listWidget.addItem("Item 7");
+
+        addRenderableWidget(listWidget);
     }
 
     @Override
