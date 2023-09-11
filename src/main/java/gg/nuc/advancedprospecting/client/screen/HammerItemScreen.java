@@ -57,34 +57,36 @@ public class HammerItemScreen extends AbstractContainerScreen<HammerItemContaine
     protected void init() {
         super.init();
 
-        listWidget = new SimpleListWidget(this.leftPos + 86, this.topPos + 19, 64, 100);
+        if (listWidget == null) {
+            listWidget = new SimpleListWidget(0, 0, 64, 100);
 
-        for (int i = 0; i < 15; i++) {
-            final int index = i;
-            TextComponent widgetTitle = new TextComponent("I ÅÍj_ " + (i + 1));
-            int he = (int) ((Math.random() * (30 - 10)) + 10);
-            ExtendedButton widget = new ExtendedButton(0, 0, listWidget.getWidth(), he, widgetTitle, button -> {
-                LOGGER.warn("B " + (index + 1));
-            });
-            listWidget.addWidget(widget);
+            for (int i = 0; i < 15; i++) {
+                final int index = i;
+                TextComponent widgetTitle = new TextComponent("I ÅÍj_ " + (i + 1));
+                int he = (int) ((Math.random() * (30 - 10)) + 10);
+                ExtendedButton widget = new ExtendedButton(0, 0, listWidget.getWidth(), he, widgetTitle, button -> {
+                    String msg="B " + (index + 1);
+                    LOGGER.warn(msg);
+                });
+                listWidget.addWidget(widget);
+            }
         }
+        // Update the position and size of the existing listWidget to match the new window size
+        listWidget.x = this.leftPos + 86;
+        listWidget.y = this.topPos + 19;
 
         addRenderableWidget(listWidget);
     }
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        if (listWidget.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)) {
-            return true;
-        }
+        listWidget.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
     }
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        if (listWidget.mouseReleased(mouseX, mouseY, button)) {
-            return true;
-        }
+        listWidget.mouseReleased(mouseX, mouseY, button);
         return super.mouseReleased(mouseX, mouseY, button);
     }
 

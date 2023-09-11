@@ -2,21 +2,25 @@ package gg.nuc.advancedprospecting.common.container;
 
 import gg.nuc.advancedprospecting.common.container.syncdata.HammerItemContainerData;
 import gg.nuc.advancedprospecting.core.init.ContainerInit;
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.SlotItemHandler;
+import net.minecraftforge.items.wrapper.PlayerInvWrapper;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HammerItemContainer extends AbstractContainerMenu {
     private static final int SLOT_AMOUNT = 0;
     private static final int DATA_AMOUNT = 2;
     public final ContainerData data;
+    private final List<HotbarSlot> updatableSlots = new ArrayList<>();
 
     // Client Constructor
     public HammerItemContainer(int id, Inventory playerInv) {
@@ -41,7 +45,7 @@ public class HammerItemContainer extends AbstractContainerMenu {
         //SLOT_A = addSlot(new SlotItemHandler(slots, 0, 62, 18));
         //SLOT_B = addSlot(new SlotItemHandler(slots, 1, 134, 18));
 
-        // TODO Lock slot to stop player from removing item that opened GUI
+        IItemHandler playerInventory = new PlayerInvWrapper(playerInv);
 
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 9; column++) {
@@ -50,14 +54,22 @@ public class HammerItemContainer extends AbstractContainerMenu {
         }
 
         for (int column = 0; column < 9; column++) {
-            addSlot(new Slot(playerInv, column, PLAYER_INVENTORY_X + column * SLOT_SIZE_WITH_EDGE, PLAYER_HOTBAR_Y));
+            HotbarSlot slot = new HotbarSlot(playerInventory, column, PLAYER_INVENTORY_X + column * SLOT_SIZE_WITH_EDGE, PLAYER_HOTBAR_Y, itemStack);
+            addSlot(slot);
+            updatableSlots.add(slot);
         }
 
         addDataSlots(data);
     }
 
-    public static MenuConstructor getServerContainer(ItemStack itemStack, Player player) {
+    public static MenuConstructor getServerContainer(ItemStack itemStack) {
         return (id, playerInv, playerEntity) -> new HammerItemContainer(id, playerInv, new ItemStackHandler(0), itemStack, new HammerItemContainerData(2));
+    }
+
+    public void updateContainerWithItemStack(ItemStack itemStack) {
+        for (HotbarSlot slot : this.updatableSlots) {
+            slot.setItemStackThatOpenedGui(itemStack);
+        }
     }
 
     public ContainerData getData() {
@@ -88,5 +100,23 @@ public class HammerItemContainer extends AbstractContainerMenu {
         }
 
         return retStack;
+    }
+
+    private static class HotbarSlot extends SlotItemHandler {
+        private ItemStack itemStackThatOpenedGui;
+
+        public HotbarSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition, ItemStack itemStackThatOpenedGui) {
+            super(itemHandler, index, xPosition, yPosition);
+            this.itemStackThatOpenedGui = itemStackThatOpenedGui;
+        }
+
+        public void setItemStackThatOpenedGui(ItemStack itemStackThatOpenedGui) {
+            this.itemStackThatOpenedGui = itemStackThatOpenedGui;
+        }
+
+        @Override
+        public boolean mayPickup(Player player) {
+            return !getItem().sameItem(itemStackThatOpenedGui);
+        }
     }
 }

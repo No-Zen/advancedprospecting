@@ -3,6 +3,7 @@ package gg.nuc.advancedprospecting.core.init;
 import gg.nuc.advancedprospecting.AdvancedProspecting;
 import gg.nuc.advancedprospecting.core.network.DebugBlockTransmutePacket;
 import gg.nuc.advancedprospecting.core.network.SyncBlockEntityPacket;
+import gg.nuc.advancedprospecting.core.network.SyncHeldItemPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
@@ -21,6 +22,9 @@ public class PacketHandler {
         CHANNEL.messageBuilder(SyncBlockEntityPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
                 .encoder(SyncBlockEntityPacket::encode).decoder(SyncBlockEntityPacket::new)
                 .consumer(SyncBlockEntityPacket::handle).add();
+        CHANNEL.messageBuilder(SyncHeldItemPacket.class, index++, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(SyncHeldItemPacket::encode).decoder(SyncHeldItemPacket::new)
+                .consumer(SyncHeldItemPacket::handle).add();
         AdvancedProspecting.LOGGER.info("Registered {} packets for mod '{}'", index, AdvancedProspecting.MOD_ID);
     }
 

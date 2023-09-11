@@ -2,6 +2,8 @@ package gg.nuc.advancedprospecting.common.event;
 
 import gg.nuc.advancedprospecting.common.container.HammerItemContainer;
 import gg.nuc.advancedprospecting.common.item.HammerItem;
+import gg.nuc.advancedprospecting.core.init.PacketHandler;
+import gg.nuc.advancedprospecting.core.network.SyncHeldItemPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TextComponent;
@@ -18,6 +20,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.network.PacketDistributor;
 
 import java.util.Random;
 
@@ -47,8 +50,11 @@ public class HammerItemHandler {
                 }
             } else {
                 if (player.isCrouching()) {
-                    MenuProvider container = new SimpleMenuProvider(HammerItemContainer.getServerContainer(heldItem, player), HammerItem.TITLE);
+                    MenuProvider container = new SimpleMenuProvider(HammerItemContainer.getServerContainer(heldItem), HammerItem.TITLE);
                     NetworkHooks.openGui((ServerPlayer) player, container);
+
+                    SyncHeldItemPacket packet = new SyncHeldItemPacket(heldItem);
+                    PacketHandler.CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), packet);
                 } else {
                     player.swing(event.getHand());
                     player.getCooldowns().addCooldown(heldItem.getItem(), 5);
