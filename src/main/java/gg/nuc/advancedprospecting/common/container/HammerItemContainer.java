@@ -20,14 +20,11 @@ public class HammerItemContainer extends AbstractContainerMenu {
 
     // Client Constructor
     public HammerItemContainer(int id, Inventory playerInv) {
-        // FIXME Bad stupid code
-        this(id, playerInv, new ItemStackHandler(SLOT_AMOUNT), Minecraft.getInstance().player.getItemInHand(InteractionHand.MAIN_HAND), Minecraft.getInstance().player, new SimpleContainerData(DATA_AMOUNT));
+        this(id, playerInv, new ItemStackHandler(SLOT_AMOUNT), ItemStack.EMPTY, new SimpleContainerData(DATA_AMOUNT));
     }
 
-    // FIXME What about slots, itemStack and player?
-
     // Server constructor
-    public HammerItemContainer(int id, Inventory playerInv, IItemHandler slots, ItemStack itemStack, Player player, ContainerData data) {
+    public HammerItemContainer(int id, Inventory playerInv, IItemHandler slots, ItemStack itemStack, ContainerData data) {
         super(ContainerInit.HAMMER_ITEM.get(), id);
         this.data = data;
         CompoundTag nbt = itemStack.getTag();
@@ -60,7 +57,7 @@ public class HammerItemContainer extends AbstractContainerMenu {
     }
 
     public static MenuConstructor getServerContainer(ItemStack itemStack, Player player) {
-        return (id, playerInv, playerEntity) -> new HammerItemContainer(id, playerInv, new ItemStackHandler(0), itemStack, player, new HammerItemContainerData(2));
+        return (id, playerInv, playerEntity) -> new HammerItemContainer(id, playerInv, new ItemStackHandler(0), itemStack, new HammerItemContainerData(2));
     }
 
     public ContainerData getData() {
