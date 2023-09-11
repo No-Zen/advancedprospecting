@@ -3,6 +3,7 @@ package gg.nuc.advancedprospecting.common.container;
 import gg.nuc.advancedprospecting.common.container.syncdata.HammerItemContainerData;
 import gg.nuc.advancedprospecting.core.init.ContainerInit;
 import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -10,17 +11,17 @@ import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
 public class HammerItemContainer extends AbstractContainerMenu {
+    private static final int SLOT_AMOUNT = 0;
+    private static final int DATA_AMOUNT = 2;
     public final ContainerData data;
-    //TODO Add a (static?) field which contains the slot amount.
 
     // Client Constructor
     public HammerItemContainer(int id, Inventory playerInv) {
         // FIXME Bad stupid code
-        this(id, playerInv, new ItemStackHandler(0), Minecraft.getInstance().player.getItemInHand(InteractionHand.MAIN_HAND), Minecraft.getInstance().player, new SimpleContainerData(4));
+        this(id, playerInv, new ItemStackHandler(SLOT_AMOUNT), Minecraft.getInstance().player.getItemInHand(InteractionHand.MAIN_HAND), Minecraft.getInstance().player, new SimpleContainerData(DATA_AMOUNT));
     }
 
     // FIXME What about slots, itemStack and player?
@@ -29,6 +30,11 @@ public class HammerItemContainer extends AbstractContainerMenu {
     public HammerItemContainer(int id, Inventory playerInv, IItemHandler slots, ItemStack itemStack, Player player, ContainerData data) {
         super(ContainerInit.HAMMER_ITEM.get(), id);
         this.data = data;
+        CompoundTag nbt = itemStack.getTag();
+        if (nbt != null) {
+            data.set(0, nbt.getInt("YLevel"));
+            data.set(1, nbt.getInt("Material"));
+        }
 
         final int SLOT_SIZE_WITH_EDGE = 16 + 2;
         final int PLAYER_INVENTORY_X = 8;
@@ -54,7 +60,11 @@ public class HammerItemContainer extends AbstractContainerMenu {
     }
 
     public static MenuConstructor getServerContainer(ItemStack itemStack, Player player) {
-        return (id, playerInv, playerEntity) -> new HammerItemContainer(id, playerInv, new ItemStackHandler(0), itemStack, player, new HammerItemContainerData(0));
+        return (id, playerInv, playerEntity) -> new HammerItemContainer(id, playerInv, new ItemStackHandler(0), itemStack, player, new HammerItemContainerData(2));
+    }
+
+    public ContainerData getData() {
+        return data;
     }
 
     @Override

@@ -1,10 +1,9 @@
 package gg.nuc.advancedprospecting.client.screen;
 
-import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import gg.nuc.advancedprospecting.AdvancedProspecting;
-import net.minecraft.client.Minecraft;
+import gg.nuc.advancedprospecting.core.util.Render;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.GameRenderer;
@@ -15,14 +14,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import static gg.nuc.advancedprospecting.AdvancedProspecting.LOGGER;
-
 public class SimpleListWidget extends AbstractWidget {
     private static final ResourceLocation TEXTURE = new ResourceLocation(AdvancedProspecting.MOD_ID, "textures/gui/list_gui.png");
-    private final List<String> items = new ArrayList<>();
+    private final List<AbstractWidget> items = new ArrayList<>();
     private int offset = 0;
     private int selected = -1;
-    private boolean isDragging;
+    private boolean isDragging = false;
 
     public SimpleListWidget(int x, int y, int width, int height) {
         super(x, y, width, height, new TranslatableComponent(""));
@@ -34,8 +31,8 @@ public class SimpleListWidget extends AbstractWidget {
         RenderSystem.setShaderTexture(0, TEXTURE);
     }
 
-    public void addItem(String item) {
-        items.add(item);
+    public void addWidget(AbstractWidget widget) {
+        items.add(widget);
     }
 
     @Override
@@ -61,59 +58,52 @@ public class SimpleListWidget extends AbstractWidget {
         //Main area
         fill(stack, scrollbarX, y, scrollbarX + 12, y + height, 0xFF8B8B8B);
 
-        // Draw items
-        //TODO Make this into a helper/utility function
-
-        //TODO Add clamp, map etc. to math utility
-
-        //Make list widget render a list of sub-widgets e.g. buttons.
-        Window window = Minecraft.getInstance().getWindow();
-        double scaleFactor = window.getGuiScale();
-        int screenHeight = window.getScreenHeight();
-
-        int scaledWidth = (int) (width * scaleFactor);
-        int scaledHeight = (int) (height * scaleFactor);
-        int scaledX = (int) (x * scaleFactor);
-        int scaledY = (int) (screenHeight - (y + height) * scaleFactor);
-
-        RenderSystem.enableScissor(scaledX, scaledY, scaledWidth, scaledHeight);
+        // Draw items, a list of sub-widgets e.g. buttons.
+        Render.enableScissor(x, y, width, height);
+        int totalHeight = 0;
         for (int i = 0; i < items.size(); i++) {
-            int entryY = y + i * 10 - offset;
-            if (entryY > y - 10 && entryY < y + height) {
+            AbstractWidget widget = items.get(i);
+            int entryY = y + totalHeight - offset;
+            totalHeight += widget.getHeight();
+            if (entryY > y - widget.getHeight() && entryY < y + height) {
                 if (i == selected) {
-                    fill(stack, x, entryY, x + width, entryY + 10, 0x880000FF);
+                    fill(stack, x, entryY, x + width, entryY + widget.getHeight(), 0x880000FF);
                 }
-                Minecraft.getInstance().font.draw(stack, items.get(i), x + 2, entryY + 2, 0xFFFFFFFF);
+                items.get(i).x = x;
+                items.get(i).y = entryY;
+                items.get(i).render(stack, mouseX, mouseY, delta);
             }
         }
-        RenderSystem.disableScissor();
+        Render.disableScissor();
 
         // Draw scrollbar
         bindTexture();
-        int maxOffset = items.size() * 10 - height;
+        int maxOffset = totalHeight - height;
         if (maxOffset > 0) {
-            int scrollerY = (int)(y+(float)(y+height-15-y)/(maxOffset)*offset);
+            int scrollerY = (int) (y + (float) (y + height - 15 - y) / (maxOffset) * offset);
             //blit(stack, destX, destY, srcX, srcY, srcW, srcH, atlasW, atlasH)
-            blit(stack, scrollbarX, scrollerY, 0, 0,12,15,32,32);
-            //int scrollbarHeight = (int) ((float) height / items.size());
-            //int scrollbarY = (int) ((float) offset / maxOffset * (height - scrollbarHeight));
-            //fill(matrices, scrollbarX, y + scrollbarY, scrollbarX + 12, y + scrollbarY + scrollbarHeight, 0x80FFFFFF);
+            blit(stack, scrollbarX, scrollerY, 0, 0, 12, 15, 32, 32);
         } else {
-            blit(stack, scrollbarX, y, 12, 0,12,15,32,32);
-            //fill(matrices, scrollbarX, y, scrollbarX + 12, y + height, 0x80CCCCCC);
+            blit(stack, scrollbarX, y, 12, 0, 12, 15, 32, 32);
         }
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height) {
-            selected = ((int) mouseY - y + offset) / 10;
-            return true;
+        int totalHeight = 0;
+        for (int i = 0; i < items.size(); i++) {
+            AbstractWidget widget = items.get(i);
+            totalHeight += widget.getHeight();
+            if (widget.isMouseOver(mouseX, mouseY)) {
+                selected = i;
+                widget.mouseClicked(mouseX, mouseY, button);
+                return true;
+            }
         }
 
-        int maxOffset = items.size() * 10 - height;
+        int maxOffset = totalHeight - height;
         int scrollbarHeight = 15;
-        int scrollerY = (int)(y+(float)(y+height-15-y)/(maxOffset)*offset);
+        int scrollerY = (int) (y + (float) (y + height - 15 - y) / (maxOffset) * offset);
 
         if (mouseX >= x + width + 6 && mouseX <= x + width + 6 + 12 && mouseY >= scrollerY && mouseY <= scrollerY + scrollbarHeight) {
             this.setFocused(true);
@@ -125,12 +115,20 @@ public class SimpleListWidget extends AbstractWidget {
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+        int totalHeight = 0;
+        for (AbstractWidget widget : items) {
+            totalHeight += widget.getHeight();
+        }
+
         if (isDragging) {
-            int maxOffset = items.size() * 10 - height;
+            int maxOffset = totalHeight - height;
             int scrollbarHeight = 15;
             offset = (int) ((mouseY - y - scrollbarHeight / 2.0) / (height - scrollbarHeight) * maxOffset);
             offset = Math.max(0, Math.min(offset, maxOffset));
             return true;
+        } else if (selected >= 0 && selected < items.size()) {
+            AbstractWidget widget = items.get(selected);
+            return widget.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
         }
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
     }
@@ -138,12 +136,21 @@ public class SimpleListWidget extends AbstractWidget {
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
         isDragging = false;
+        if (selected >= 0 && selected < items.size()) {
+            AbstractWidget widget = items.get(selected);
+            return widget.mouseReleased(mouseX, mouseY, button);
+        }
         return super.mouseReleased(mouseX, mouseY, button);
     }
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
-        int maxOffset = items.size() * 10 - height;
+        int totalHeight = 0;
+        for (AbstractWidget widget : items) {
+            totalHeight += widget.getHeight();
+        }
+
+        int maxOffset = totalHeight - height;
         if (mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height) {
             offset = (int) Math.max(0, Math.min(offset - amount * 10, maxOffset));
             return true;

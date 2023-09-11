@@ -7,15 +7,23 @@ import gg.nuc.advancedprospecting.common.container.HammerItemContainer;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraftforge.client.gui.widget.ExtendedButton;
 import org.jetbrains.annotations.NotNull;
+
+import static gg.nuc.advancedprospecting.AdvancedProspecting.LOGGER;
 
 public class HammerItemScreen extends AbstractContainerScreen<HammerItemContainer> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(AdvancedProspecting.MOD_ID, "textures/gui/hammer_item.png");
+    private final HammerItemContainer container;
+    private SimpleListWidget listWidget;
 
     public HammerItemScreen(HammerItemContainer container, Inventory playerInv, Component title) {
         super(container, playerInv, title);
+        this.container = container;
         this.leftPos = 0;
         this.topPos = 0;
         this.imageWidth = 176;
@@ -32,17 +40,18 @@ public class HammerItemScreen extends AbstractContainerScreen<HammerItemContaine
     public void render(@NotNull PoseStack stack, int mouseX, int mouseY, float partialTicks) {
         super.render(stack, mouseX, mouseY, partialTicks);
 
-        this.font.draw(stack, "Y level: ???", this.leftPos + 7, this.topPos + 32, 0x404040);
-        this.font.draw(stack, "Material: ???", this.leftPos + 7, this.topPos + 43, 0x404040);
+        ContainerData data = container.getData();
+        String yLevel = data.get(0) != 0 ? String.valueOf(data.get(0)) : "???";
+        String material = data.get(1) != 0 ? String.valueOf(data.get(1)) : "???";
+
+        this.font.draw(stack, "Y level: " + yLevel, this.leftPos + 7, this.topPos + 32, 0x404040);
+        this.font.draw(stack, "Material: " + material, this.leftPos + 7, this.topPos + 43, 0x404040);
 
         this.font.draw(stack, this.title, this.leftPos + 7, this.topPos + 7, 0x404040);
         this.font.draw(stack, this.playerInventoryTitle, this.leftPos + 7, this.topPos + 124, 0x404040);
 
-
         this.renderTooltip(stack, mouseX, mouseY);
     }
-
-    private SimpleListWidget listWidget;
 
     @Override
     protected void init() {
@@ -51,7 +60,13 @@ public class HammerItemScreen extends AbstractContainerScreen<HammerItemContaine
         listWidget = new SimpleListWidget(this.leftPos + 86, this.topPos + 19, 64, 100);
 
         for (int i = 0; i < 15; i++) {
-            listWidget.addItem("Item ÅÍJG_ " + (i + 1));
+            final int index = i;
+            TextComponent widgetTitle = new TextComponent("I ÅÍj_ " + (i + 1));
+            int he = (int) ((Math.random() * (30 - 10)) + 10);
+            ExtendedButton widget = new ExtendedButton(0, 0, listWidget.getWidth(), he, widgetTitle, button -> {
+                LOGGER.warn("B " + (index + 1));
+            });
+            listWidget.addWidget(widget);
         }
 
         addRenderableWidget(listWidget);
@@ -59,7 +74,6 @@ public class HammerItemScreen extends AbstractContainerScreen<HammerItemContaine
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        // Assuming simpleListWidget is your SimpleListWidget instance
         if (listWidget.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)) {
             return true;
         }
