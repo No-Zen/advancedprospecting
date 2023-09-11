@@ -38,6 +38,11 @@ public class HammerItem extends Item {
     }
 
     @Override
+    public int getItemStackLimit(ItemStack stack) {
+        return 1;
+    }
+
+    @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         if (!tooltip.isEmpty()) {
             tooltip.set(0, tooltip.get(0).copy().withStyle(ChatFormatting.WHITE));

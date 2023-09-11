@@ -65,7 +65,7 @@ public class HammerItemScreen extends AbstractContainerScreen<HammerItemContaine
                 TextComponent widgetTitle = new TextComponent("I ÅÍj_ " + (i + 1));
                 int he = (int) ((Math.random() * (30 - 10)) + 10);
                 ExtendedButton widget = new ExtendedButton(0, 0, listWidget.getWidth(), he, widgetTitle, button -> {
-                    String msg="B " + (index + 1);
+                    String msg = "B " + (index + 1);
                     LOGGER.warn(msg);
                 });
                 listWidget.addWidget(widget);
