@@ -6,7 +6,7 @@ import gg.nuc.advancedprospecting.AdvancedProspecting;
 import gg.nuc.advancedprospecting.common.container.DebugBlockContainer;
 import gg.nuc.advancedprospecting.core.init.PacketHandler;
 import gg.nuc.advancedprospecting.core.network.DebugBlockTransmutePacket;
-import gg.nuc.advancedprospecting.core.util.Math;
+import gg.nuc.advancedprospecting.core.util.MathN;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
@@ -39,7 +39,7 @@ public class DebugBlockScreen extends AbstractContainerScreen<DebugBlockContaine
 
         final int progress = this.menu.data.get(0);
         final int maxProgress = this.menu.data.get(1);
-        final int scaledWidth = (int) Math.mapClamped(progress, 0, maxProgress, 0, 22);
+        final int scaledWidth = (int) MathN.mapClamped(progress, 0, maxProgress, 0, 22);
         bindTexture();
         blit(stack, this.leftPos + 95, this.topPos + 18, 176, 0, scaledWidth, 16);
 

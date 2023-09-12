@@ -1,7 +1,7 @@
 package gg.nuc.advancedprospecting.core.util;
 
 @SuppressWarnings("unused")
-public class Math {
+public class MathN {
     public static double clamp(double value, double min, double max) {
         return java.lang.Math.max(min, java.lang.Math.min(value, max));
     }
@@ -11,7 +11,7 @@ public class Math {
     }
 
     public static double mapClamped(double value, double rangeMin, double rangeMax, double resultMin, double resultMax) {
-        double clampedValue = Math.clamp(value, rangeMin, rangeMax);
+        double clampedValue = MathN.clamp(value, rangeMin, rangeMax);
         return (clampedValue - rangeMin) / (rangeMax - rangeMin) * (resultMax - resultMin) + resultMin;
     }
 }
