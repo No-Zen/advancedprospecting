@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
@@ -100,6 +101,11 @@ public class HammerItemScreen extends AbstractContainerScreen<HammerItemContaine
         this.font.draw(stack, this.playerInventoryTitle, this.leftPos + 7, this.topPos + 124, 0x404040);
 
         this.renderTooltip(stack, mouseX, mouseY);
+        if (selectedBlock != null) {
+            if (mouseX >= this.leftPos + 8 && mouseY >= this.topPos + 55 && mouseX <= this.leftPos + 8 + 64 && mouseY <= this.topPos + 55 + 64) {
+                minecraft.screen.renderTooltip(stack, new TextComponent(selectedBlock.getName().getString()), mouseX, mouseY);
+            }
+        }
     }
 
     @Override
@@ -185,6 +191,14 @@ public class HammerItemScreen extends AbstractContainerScreen<HammerItemContaine
 
         addRenderableWidget(listWidget);
     }
+
+    /*
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        listWidget.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+    */
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {

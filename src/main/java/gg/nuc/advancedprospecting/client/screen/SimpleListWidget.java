@@ -92,20 +92,22 @@ public class SimpleListWidget extends AbstractWidget {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        int totalHeight = 0;
         if (this.isMouseOver(mouseX, mouseY)) {
             for (AbstractWidget widget : items) {
-                totalHeight += widget.getHeight();
-
                 if (widget.isMouseOver(mouseX, mouseY)) {
                     widget.onClick(mouseX, mouseY);
                 }
             }
         }
 
+        int totalHeight = 0;
+        for (AbstractWidget widget : items) {
+            totalHeight += widget.getHeight();
+        }
+
         int maxOffset = totalHeight - height;
         int scrollbarHeight = 15;
-        int scrollerY = (int) (y + (float) (y + height - 15 - y) / (maxOffset) * offset);
+        int scrollerY = (int) (y + (float) (y + height - scrollbarHeight - y) / (maxOffset) * offset);
 
         if (mouseX >= x + width + 6 && mouseX <= x + width + 6 + 12 && mouseY >= scrollerY && mouseY <= scrollerY + scrollbarHeight) {
             this.setFocused(true);
